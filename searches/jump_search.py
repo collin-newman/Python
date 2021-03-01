@@ -23,22 +23,33 @@ def jump_search(arr: list, x: int) -> int:
     10
     """
 
-    n = len(arr)
-    step = int(math.floor(math.sqrt(n)))
-    prev = 0
-    while arr[min(step, n) - 1] < x:
-        prev = step
-        step += int(math.floor(math.sqrt(n)))
-        if prev >= n:
-            return -1
+    """edge cases"""
+    if len(arr) == 0:
+        return -1
+    if arr[0] > x:
+        return -1
+    if arr[len(arr) - 1] < x:
+        return -1
 
-    while arr[prev] < x:
-        prev = prev + 1
-        if prev == min(step, n):
-            return -1
-    if arr[prev] == x:
-        return prev
-    return -1
+    targetIndex = -1
+    length = len(arr) - 1
+    lowerBound = 0
+    upperBound = arr[length]
+    block = math.floor(math.sqrt(x))
+
+    for index in range(0, length, block):
+        if arr[index] < x:
+            lowerBound = index
+        else:
+            upperBound = index
+            break
+
+    for index in range(lowerBound, upperBound, 1):
+        if arr[index] == x:
+            targetIndex = index
+            break
+
+    return targetIndex
 
 
 if __name__ == "__main__":
